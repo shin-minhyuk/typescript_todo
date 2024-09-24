@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Todo } from "../types";
+import TodoItem from "../components/TodoItem";
 
 export default function Home() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
@@ -33,34 +34,6 @@ export default function Home() {
     setLocalStorageTodos();
   };
 
-  // 수정 버튼 토글: 특정 id값 항목의 Completed를 토글하는 함수
-  const toggleCompleteTodo = (id: number) => {
-    const updatedTodos = todoList.map((todo) =>
-      todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
-    );
-
-    setTodoList(updatedTodos);
-    setLocalStorageTodos();
-  };
-
-  // 수정: 특정 id값 항목을 수정하는 함수
-  const updateTodoTitle = (id: number, newTitle: string) => {
-    const updatedTodos = todoList.map((todo) =>
-      todo.id === id ? { ...todo, title: newTitle } : todo
-    );
-
-    setTodoList(updatedTodos);
-    setLocalStorageTodos();
-  };
-
-  // 삭제: 특정 id값을 제외하는 함수
-  const deleteTodoItem = (id: number) => {
-    const updatedTodos = todoList.filter((todo) => todo.id !== id);
-
-    setTodoList(updatedTodos);
-    setLocalStorageTodos();
-  };
-
   return (
     <>
       <div>
@@ -72,21 +45,13 @@ export default function Home() {
         <div>{todo.title || "TODO를 작성해주세요"}</div>
 
         {todoList.map((el) => (
-          <div key={el.id}>
-            {el.isCompleted ? (
-              <input
-                type='text'
-                value={el.title}
-                onChange={(e) => updateTodoTitle(el.id, e.target.value)}
-              />
-            ) : (
-              <div>제목: {el.title}</div>
-            )}
-            <button onClick={() => toggleCompleteTodo(el.id)}>
-              {el.isCompleted ? "수정완료" : "수정"}
-            </button>
-            <button onClick={() => deleteTodoItem(el.id)}>삭제</button>
-          </div>
+          <TodoItem
+            key={el.id}
+            {...el}
+            todoList={todoList}
+            setTodoList={setTodoList}
+            setLocalStorageTodos={setLocalStorageTodos}
+          />
         ))}
       </div>
     </>
