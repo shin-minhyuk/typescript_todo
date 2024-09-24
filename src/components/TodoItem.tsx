@@ -1,7 +1,7 @@
 import { Todo } from "../types";
 
 interface TodoItemProps extends Todo {
-  setLocalStorageTodos: () => void;
+  // setLocalStorageTodos: () => void;
   // 컴포넌트를 나눌 때 linter가 에러를 많이 잡았는데 useState 상태 변경 함수를 프롭으로 내려줄 때
   // 타입을 어떻게 정해줘야할지 몰라서 찾아보니 아래의 코드처럼 작성하면 된다고 함. 하지만 또 다른 방법이 있는지? 궁금
   setTodoList: React.Dispatch<React.SetStateAction<Todo[]>>;
@@ -12,7 +12,6 @@ export default function TodoItem({
   id,
   title,
   isCompleted,
-  setLocalStorageTodos,
   setTodoList,
   todoList,
 }: TodoItemProps) {
@@ -23,7 +22,6 @@ export default function TodoItem({
     );
 
     setTodoList(updatedTodos);
-    setLocalStorageTodos();
   };
 
   // 수정: 특정 id값 항목을 수정하는 함수
@@ -33,7 +31,6 @@ export default function TodoItem({
     );
 
     setTodoList(updatedTodos);
-    setLocalStorageTodos();
   };
 
   // 삭제: 특정 id값을 제외하는 함수
@@ -41,7 +38,6 @@ export default function TodoItem({
     const updatedTodos = todoList.filter((todo) => todo.id !== id);
 
     setTodoList(updatedTodos);
-    setLocalStorageTodos();
   };
 
   return (
