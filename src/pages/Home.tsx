@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { Todo } from "../types";
 import TodoItem from "../components/TodoItem";
 
+const defaultTodoValue: Todo = {
+  id: Number(new Date()),
+  title: "",
+  isCompleted: false,
+}
+
 export default function Home() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
-  const [todo, setTodo] = useState<Todo>({
-    id: Number(new Date()),
-    title: "",
-    isCompleted: false,
-  });
+  const [todo, setTodo] = useState<Todo>(defaultTodoValue);
 
   // 투두리스트 렌더링: 첫 로딩 데이터 패칭 함수
   useEffect(() => {
@@ -28,26 +30,26 @@ export default function Home() {
    */
 
   // 추가: 저장된 상태 기반 데이터 저장 및 로컬스토리지 추가
-  const addTodoList = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const addTodoList = () => {
     setTodoList([...todoList, todo]);
-    setTodo({ id: Number(new Date()), title: "", isCompleted: false });
+    setTodo(defaultTodoValue); // 초기 상태로 돌려줘야 함.
   };
 
   return (
     <>
       <div>
         <input
+          type="text"
           value={todo.title}
           onChange={(e) => setTodo({ ...todo, title: e.target.value })}
         />
-        <button onClick={addTodoList}>추가</button>
+        <button type="button" onClick={addTodoList}>추가</button>
         <div>{todo.title || "TODO를 작성해주세요"}</div>
 
-        {todoList.map((el) => (
+        {todoList.map((todoItem) => (
           <TodoItem
             key={el.id}
-            {...el}
+            {...todoItem}
             todoList={todoList}
             setTodoList={setTodoList}
           />
